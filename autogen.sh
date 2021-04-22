@@ -241,10 +241,10 @@ EOF
                 ;;
             type)
                 case $(uname | tr A-Z a-z) in
-                    msys*)    echo "msys"    ;;
-                    mingw32*) echo "mingw32" ;;
-                    mingw64*) echo "mingw64" ;;
-                    cygwin*)  echo 'cygwin'  ;;
+                    msys*)    echo "windows/msys"    ;;
+                    mingw32*) echo "windows/mingw32" ;;
+                    mingw64*) echo "windows/mingw64" ;;
+                    cygwin*)  echo 'windows/cygwin'  ;;
                     *)  uname | tr A-Z a-z
                 esac
                 ;;
@@ -259,7 +259,7 @@ EOF
                         __get_os_name_from_etc_os_release ||
                         __get_os_name_from_lsb_release
                         ;;
-                    msys|mingw*|cygwin)
+                    windows/*)
                         systeminfo | grep 'OS Name:' | cut -d: -f2 | head -n 1 | sed 's/^[[:space:]]*//' ;;
                     *)  uname | tr A-Z a-z
                 esac
@@ -280,7 +280,7 @@ EOF
                         __get_os_version_from_etc_os_release ||
                         __get_os_version_from_lsb_release
                         ;;
-                    msys*|mingw*|cygwin*)
+                    windows/*)
                         systeminfo | grep 'OS Version:' | cut -d: -f2 | head -n 1 | sed 's/^[[:space:]]*//' | cut -d ' ' -f1 ;;
                 esac
                 ;;
@@ -1091,7 +1091,7 @@ EOF
     fi
 
     case $NATIVE_OS_TYPE in
-        cygwin|msys|mingw32|mingw64) ;;
+        windows/*) ;;
         *) [ "$(whoami)" = root ] || sudo=sudo
     esac
 
