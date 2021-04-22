@@ -1043,10 +1043,6 @@ EOF
         *)  die "$1: not support action."
     esac
 
-    if [ "$(whoami)" != root ] ; then
-        sudo=sudo
-    fi
-
     step "show current machine os info"
     NATIVE_OS_TYPE=$(os type)
     NATIVE_OS_NAME=$(os name)
@@ -1069,6 +1065,11 @@ EOF
         required command autoconf-$AUTOCONF_VERSION ge "$AUTOCONF_VERSION_MREQUIRED"
         required command automake-$AUTOMAKE_VERSION
     fi
+
+    case $NATIVE_OS_TYPE in
+        cygwin|msys|mingw32|mingw64) ;;
+        *) [ "$(whoami)" = root ] || sudo=sudo
+    esac
 
     step "show current machine os effective user info"
     id | tr ' ' '\n' | head -n 2
