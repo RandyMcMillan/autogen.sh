@@ -1005,7 +1005,7 @@ EOF
             return 0
             ;;
         -V|--version)
-            echo "1.0.0"
+            echo "$PROJECT_VERSION"
             return 0
             ;;
         -x) set -x ;;
