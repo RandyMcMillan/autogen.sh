@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ctypes.sh
 
 This is `ctypes.sh`, a foreign function interface for bash.
@@ -98,3 +99,7 @@ puts "hello, world"
 * "I never knew the c could stand for Cthulhu."
 
 You can read more about ctypes.sh and see it in action on the [Wiki](https://github.com/taviso/ctypes.sh/wiki)
+=======
+# autogen.sh
+autogen.sh is a POSIX shell script to manage GNU Autotools(autoconf automake) and other softwares used by your project.
+>>>>>>> Initial commit
