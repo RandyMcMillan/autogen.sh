@@ -4,6 +4,8 @@ autoreconf -vif
 
 ln -s $(which glibtoolize) /usr/local/bin/libtoolize
 
+# https://github.com/leleliu008/autogen.sh
+
 cd "$(dirname "$0")" || exit 1
 CURRENT_DIR="$PWD"
 
@@ -863,6 +865,8 @@ __available_package_manager_list() {
         echo brew
     fi
 
+    [ "$NATIVE_OS_TYPE" = 'darwin' ] && return
+
     if exists command apt ; then
         echo apt
     elif exists command apt-get ; then
@@ -951,7 +955,7 @@ __install_command_via_available_package_manager() {
                 warn "no package manager found."
                 return 1
             else
-                echo "Found $(list_length $AVAILABLE_PACKAGE_MANAGER_LIST) package manager : ${COLOR_GREEN}$AVAILABLE_PACKAGE_MANAGER_LIST${COLOR_OFF}"
+                echo "    Found $(list_length $AVAILABLE_PACKAGE_MANAGER_LIST) package manager : ${COLOR_GREEN}$AVAILABLE_PACKAGE_MANAGER_LIST${COLOR_OFF}"
             fi
         fi
         for pm in $AVAILABLE_PACKAGE_MANAGER_LIST
