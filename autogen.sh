@@ -698,10 +698,8 @@ command_version_match() {
 get_choco_package_name_by_command_name() {
     case $1 in
       cc|gcc) echo 'gcc-g++' ;;
-        make) echo 'make' ;;
        gmake) echo 'make' ;;
          gm4) echo 'm4'    ;;
-       gperf) echo 'gperf' ;;
         gsed) echo 'gnu-sed'  ;;
      objcopy) echo 'binutils' ;;
       protoc) echo 'protobuf' ;;
@@ -713,7 +711,6 @@ get_choco_package_name_by_command_name() {
     automake|autoheader)
               echo "automake" ;;
     autopoint) echo "gettext" ;;
-    pkg-config) echo "pkg-config" ;;
         *) echo "$1"
     esac
 }
