@@ -283,7 +283,6 @@ map_contains() {
     do
         [ "$item" = "$2" ] && return 0
     done
-    return 1
 }
 
 # $1 map_name
