@@ -3,6 +3,7 @@
 autoreconf -vif
 
 ln -s $(which glibtoolize) /usr/local/bin/libtoolize
+set -x
 
 # https://github.com/leleliu008/autogen.sh
 
