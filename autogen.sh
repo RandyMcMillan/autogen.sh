@@ -9,13 +9,13 @@ set -x
 
 
 
-if command -v realpath > /dev/null ; then
-    unset CURRENT_SCRIPT_FILEPATH
-    CURRENT_SCRIPT_FILEPATH=$(realpath $0) || exit 1
-else
-    printf "%b\n" "${COLOR_RED}[✘] command not found: realpath${COLOR_OFF}"
-    exit 1
-fi
+unset CURRENT_SCRIPT_DIR
+unset CURRENT_SCRIPT_FILENAME
+unset CURRENT_SCRIPT_FILEPATH
+
+CURRENT_SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd) || exit 1
+CURRENT_SCRIPT_FILENAME=$(basename "$0")
+CURRENT_SCRIPT_FILEPATH="$CURRENT_SCRIPT_DIR/$CURRENT_SCRIPT_FILENAME"
 
 COLOR_RED='\033[0;31m'          # Red
 COLOR_GREEN='\033[0;32m'        # Green
@@ -558,6 +558,11 @@ fetch() {
 __upgrade_self() {
     set -e
 
+    handle_dependency required command realpath
+
+    unset CURRENT_SCRIPT_REALPATH
+    CURRENT_SCRIPT_REALPATH=$(realpath $CURRENT_SCRIPT_FILEPATH)
+
     unset FETCH_SELF_OUTPUT_DIR
     FETCH_SELF_OUTPUT_DIR=$(mktemp -d)
 
@@ -569,10 +574,10 @@ __upgrade_self() {
     run chmod a+x "$FETCH_SELF_OUTPUT_PATH"
 
     __upgrade_self_exit() {
-        if [ -w "$CURRENT_SCRIPT_FILEPATH" ] ; then
-            run      cp "$FETCH_SELF_OUTPUT_PATH" "$CURRENT_SCRIPT_FILEPATH"
+        if [ -w "$CURRENT_SCRIPT_REALPATH" ] ; then
+            run      cp "$FETCH_SELF_OUTPUT_PATH" "$CURRENT_SCRIPT_REALPATH"
         else
-            run sudo cp "$FETCH_SELF_OUTPUT_PATH" "$CURRENT_SCRIPT_FILEPATH"
+            run sudo cp "$FETCH_SELF_OUTPUT_PATH" "$CURRENT_SCRIPT_REALPATH"
         fi
     }
 
@@ -1101,6 +1106,7 @@ get_pkg_add_package_name_by_command_name() {
         find) echo 'findutils';;
         diff) echo 'diffutils';;
      objcopy) echo 'binutils' ;;
+    realpath) echo 'coreutils';;
       protoc) echo 'protobuf' ;;
       ps2pdf) echo "ghostscript" ;;
     pip3|pip) echo 'py3-pip' ;;
@@ -1131,6 +1137,7 @@ get_pkgin_package_name_by_command_name() {
         find) echo 'findutils';;
         diff) echo 'diffutils';;
      objcopy) echo 'binutils' ;;
+    realpath) echo 'coreutils';;
       protoc) echo 'protobuf' ;;
       ps2pdf) echo "ghostscript" ;;
     pip3|pip) echo 'py38-pip'  ;;
@@ -1406,6 +1413,7 @@ get_brew_package_name_by_command_name() {
         find) echo 'findutils';;
         diff) echo 'diffutils';;
      objcopy) echo 'binutils' ;;
+    realpath) echo 'coreutils';;
       protoc) echo 'protobuf' ;;
       ps2pdf) echo "ghostscript" ;;
      rst2man.py|rst2html.py)
