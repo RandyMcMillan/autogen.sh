@@ -274,18 +274,6 @@ clean-local:
 ##	:	all			execute installer scripts
 ##	:	init
 ##	:	brew
-##	:	keymap
-
-##	:
-##	:	whatami			report system info
-##	:
-##	:	adduser-git		add a user named git
-
-keymap:## install ./init/com.local.KeyRemapping.plist
-	@mkdir -p ~/Library/LaunchAgents/
-	@cat ./init/com.local.KeyRemapping.plist > ~/Library/LaunchAgents/com.local.KeyRemapping.plist
-#REF: https://tldp.org/LDP/abs/html/abs-guide.html#IO-REDIRECTION
-	#test hidutil && hidutil property --set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000039,"HIDKeyboardModifierMappingDst":0x700000029}]}' > /dev/null 2>&1 && echo "<Caps> = <Esc>" || echo wuh
 
 init:## chsh -s /bin/bash && ./scripts/initialize
 .ONESHELL:
@@ -296,10 +284,6 @@ brew:-## install or update/upgrade brew
 	export HOMEBREW_INSTALL_FROM_API=1
 	type -P brew && echo -e "try\nbrew update --casks --greedy"|| ./install-brew.sh
 	@eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" && brew upgrade  --casks && brew update
-iterm:## brew install --cask iterm2
-	rm -rf /Applications/iTerm.app
-	test brew && brew install -f --cask iterm2 && \
-		curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash
 
 .PHONY: help
 help:## print verbose help
@@ -410,24 +394,16 @@ template:
 nvm: executable ## nvm
 	@curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash || git pull -C $(HOME)/.nvm && export NVM_DIR="$(HOME)/.nvm" && [ -s "$(NVM_DIR)/nvm.sh" ] && \. "$(NVM_DIR)/nvm.sh" && [ -s "$(NVM_DIR)/bash_completion" ] && \. "$(NVM_DIR)/bash_completion"  && nvm install $(NODE_VERSION) && nvm use $(NODE_VERSION)
 	@source ~/.bashrc && nvm alias $(NODE_ALIAS) $(NODE_VERSION)
+nvm-clean: ## nvm-clean
+	@rm -rf ~/.nvm
 
-##	:	cirrus			source and run install-cirrus command
-cirrus: executable
-	bash -c "source $(PWD)/install-cirrus.sh && install-cirrus $(FORCE)"
-##	:	config-dock		source and run config-dock-prefs
-config-dock: executable
-	bash -c "source $(PWD)/config-dock-prefs.sh && brew-install-dockutils && config-dock-prefs $(FORCE)"
-
-macvim: vim##
 vim:## vim - install-vim.sh
 	install -d ./vimrc ~/.vim_runtime
 	bash -c "source $(PWD)/template && checkbrew install --cask	macvim"
-
+macvim: vim## 	
 	./install-vim.sh
 macdown:
 	bash -c "source $(PWD)/template && checkbrew install	macdown"
-glow:
-	bash -c "source $(PWD)/template && checkbrew install	glow"
 coreutils:
 	bash -c "source $(PWD)/template && checkbrew install	coreutils"
 gettext:
@@ -438,8 +414,6 @@ help2man:
 	bash -c "source $(PWD)/template && checkbrew install	help2man"
 gnutls:
 	bash -c "source $(PWD)/template && checkbrew install	gnutls"
-keepingyouawake:## 	keepingyouawake
-	bash -c "source $(PWD)/template && checkbrew install	keepingyouawake"
 wasm-pack:
 	curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 brew-libs: libassuan libgcrypt libgpg-error libksba libusb
@@ -639,9 +613,6 @@ bitcoin-test-battery:
 funcs:
 	make -f funcs.mk
 
-clean-nvm: ## clean-nvm
-	@rm -rf ~/.nvm
-
 .ONESHELL:
 elfutils:
 	type -P brew && brew install autoconf automake libtool gcc argp-standalone gawk libarchive libmicrohttpd gettext
@@ -655,6 +626,7 @@ elfutils:
 	CC=gcc-9 CFLAGS="-I/usr/local/include -I/usr/local/opt/gettext/include/" LDFLAGS="-L/usr/local/opt/argp-standalone/lib/" PKG_CONFIG_PATH=/usr/local/opt/libarchive/lib/pkgconfig ../configure --prefix=$(pwd)/../install --disable-symbol-versioning --enable-maintainer-mode
 	make -j12
 
+-include nostril.mk
 -include venv.mk
 -include act.mk
 -include Makefile

@@ -1,3 +1,12 @@
 [submodule "elfutils"]
 	path = elfutils
 	url = git@github.com:RandyMcMillan/elfutils.git
+[submodule "dugite-native"]
+	path = dugite-native
+	url = git@github.com:gnostr-org/dugite-native.git
+[submodule "dugite"]
+	path = dugite
+	url = git@github.com:gnostr-org/dugite.git
+[submodule "nostril"]
+	path = nostril
+	url = git@github.com:RandyMcMillan/nostril
