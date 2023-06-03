@@ -14,7 +14,8 @@ gen_config_pre() {
 }
 
 gen_config_post() {
-    step "convert optlib/*.ctags to optlib/*.c"
+    step "convert ctags/optlib/*.ctags to ctags/optlib/*.c"
+    pushd ctags
     for input in optlib/*.ctags
     do
         output="${input%.ctags}.c"
@@ -22,13 +23,15 @@ gen_config_post() {
         perl ./misc/optlib2c "$input" > "$output" || return 1
     done
 
+    popd
+
     __die_if_no_c_compiler
 
     step "check if $HOST_CC works."
     (__check_if_c_compiler_works) || die "$HOST_CC not works."
 
     step "build packcc"
-    . ./config.host
+    pushd ctags
     for item in -DPCC_USE_SYSTEM_STRNLEN ""
     do
         if run "$HOST_CC $HOST_CFLAGS $item -o packcc$host_os_exec_ext misc/packcc/src/packcc.c" ; then
@@ -36,11 +39,13 @@ gen_config_post() {
             return 0
         fi
     done
+    popd
     die "build packcc failed."
 }
 
 __die_if_no_c_compiler() {
     step "find c compiler"
+    . ./config.host
     [ -z "$HOST_CC" ] && {
         for cc in cc gcc clang
         do
