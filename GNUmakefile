@@ -418,9 +418,6 @@ cirrus: executable
 config-dock: executable
 	bash -c "source $(PWD)/config-dock-prefs.sh && brew-install-dockutils && config-dock-prefs $(FORCE)"
 
-.PHONY: all
-##	:	all			exec gnupg brew-libs
-all: executable gnupg brew-libs
 macvim: vim##
 vim:## vim - install-vim.sh
 	install -d ./vimrc ~/.vim_runtime
@@ -584,81 +581,6 @@ docker-install:## 	Download Docker.amd64.93002.dmg for MacOS Intel Compatibility
 	@[[ '$(shell uname -s)' == 'Darwin'* ]] && type -P open 2>/dev/null && open Docker.amd64.93002.dmg
 
 
-.PHONY: shell alpine alpine-shell debian debian-shell d-shell
-shell: alpine-shell docker-start
-##	:	alpine-shell		run install-shell.sh alpine user=root
-alpine-shell: alpine
-alpine:
-	test docker && $(DOTFILES_PATH)/scripts/install-shell.sh alpine || echo "make docker OR checkbrew -i docker"
-##	:	alpine-build		run install-shell.sh alpine-build user=root
-alpine-build:
-	test docker && $(DOTFILES_PATH)/scripts/install-shell.sh alpine-build || echo "make docker OR checkbrew -i docker"
-d-shell: debian-shell
-##	:	debian-shell		run install-shell.sh debian user=root
-debian-shell: debian
-debian: docker-start
-	test docker && $(DOTFILES_PATH)/scripts/install-shell.sh debian || echo "make docker OR checkbrew -i docker"
-	$(DOTFILES_PATH)/install-shell.sh debian
-
-##	:	porter
-porter:
-	@curl -L https://cdn.porter.sh/$(PORTER_VERSION)/install-mac.sh > install-porter.sh \
-	&& chmod +x install-porter.sh && ./install-porter.sh \
-	&& export PATH=$(PATH):~/.porter
-
-.PHONY: vim
-##	:	install-vim			install vim and macvim on macos
-install-vim: executable##
-	$(DOTFILES_PATH)/install-vim.sh $(FORCE)
-
-.PHONY: protonvpn
-protonvpn: executable
-	$(DOTFILES_PATH)/install-protonvpn.sh $(FORCE)
-
-.PHONY: config-git
-config-git: executable
-	$(DOTFILES_PATH)/./config-git
-
-.PHONY: qt5
-##	:	qt5			install qt@5
-qt5: executable
-	$(DOTFILES_PATH)/./install-qt5.sh
-	$(DOTFILES_PATH)/./install-qt5-creator.sh
-
-.PHONY: hub
-hub: executable
-	$(DOTFILES_PATH)/./install-github-utility.sh
-
-.PHONY: config-github
-config-github: executable
-	$(DOTFILES_PATH)/./config-github
-
-.PHONY: bitcoin-libs
-.ONESHELL:
-##	:
-##	:	bitcoin-libs		install bitcoin-libs
-bitcoin-libs: exec
-	bash -c "source $(DOTFILES_PATH)/bitcoin-libs && install-bitcoin-libs"
-.PHONY: bitcoin-depends
-.ONESHELL:
-##	:	bitcoin-depends		make depends from bitcoin repo
-bitcoin-depends: exec bitcoin-libs
-	@test brew && brew install autoconf automake libtool pkg-config || echo "make brew && make bitcoin-depends"
-	@brew install autoconf || echo "make brew && brew install autoconf"
-	@rm -rf ./bitcoin
-	@git clone --filter=blob:none https://github.com/bitcoin/bitcoin.git && \
-		cd ./bitcoin && ./autogen.sh && ./configure && $(MAKE) -C depends
-bitcoin-guix-sigs:
-	@if [[ ! -d "guix.sigs" ]]; then git clone git@github.com:randymcmillan/guix.sigs.git; fi
-	@pushd guix.sigs && git reset --hard && git remote -v | grep -w upstream && \
-	git remote set-url upstream https://github.com/bitcoin-core/guix.sigs.git || \
-	git remote add     upstream https://github.com/bitcoin-core/guix.sigs.git && \
-	git push -f origin main:main && popd
-.PHONY:depends
-depends-download:
-	$(MAKE) download -C depends
-depends:depends-download
-	$(MAKE) -C depends
 .PHONY: push
 .ONESHELL:
 push: touch-time
@@ -720,11 +642,21 @@ funcs:
 clean-nvm: ## clean-nvm
 	@rm -rf ~/.nvm
 
--include Makefile
--include funcs.mk
--include legit.mk
--include nostril.mk
+.ONESHELL:
+elfutils:
+	type -P brew && brew install autoconf automake libtool gcc argp-standalone gawk libarchive libmicrohttpd gettext
+	bash -c "export PATH="/usr/local/opt/m4/bin:$PATH"
+	bash -c "export PATH="/usr/local/opt/autoconf/bin:$PATH"
+	bash -c "export PATH="/usr/local/opt/libtool/bin:$PATH"
+	bash -c "export PATH="/usr/local/opt/gcc/bin:$PATH"
+	pushd elfutils
+	bash -c "aclocal; autoheader; glibtoolize --copy; autoconf; automake --gnu --copy --add-missing"
+	bash -c "mkdir -p build && cd build"
+	CC=gcc-9 CFLAGS="-I/usr/local/include -I/usr/local/opt/gettext/include/" LDFLAGS="-L/usr/local/opt/argp-standalone/lib/" PKG_CONFIG_PATH=/usr/local/opt/libarchive/lib/pkgconfig ../configure --prefix=$(pwd)/../install --disable-symbol-versioning --enable-maintainer-mode
+	make -j12
+
 -include venv.mk
 -include act.mk
+-include Makefile
 # vim: set noexpandtab:
 # vim: set setfiletype make
