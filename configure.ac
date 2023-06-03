@@ -511,8 +511,8 @@ AC_CONFIG_FILES([tests/Makefile])
 
 # Get the definitions necessary to create the Makefiles in the po
 # subdirectories.  This is a small subset of the gettext rules.
-AC_SUBST(USE_NLS, yes)
-AM_PO_SUBDIRS
+#AC_SUBST(USE_NLS, yes)
+#AM_PO_SUBDIRS
 
 dnl Appended to the config.h file.
 dnl We hide all kinds of configuration magic in lib/ag-config.h.

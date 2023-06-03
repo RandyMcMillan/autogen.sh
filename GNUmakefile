@@ -221,14 +221,14 @@ VERBOSE                                 :=
 endif
 export VERBOSE
 
-BREW                                    := $(shell which brew || echo)
-export BREW
-BREW_PREFIX                             := $(shell brew --prefix || echo)
-export BREW_PREFIX
-BREW_CELLAR                             := $(shell brew --cellar || echo)
-export BREW_CELLAR
-HOMEBREW_NO_ENV_HINTS                   := false
-export HOMEBREW_NO_ENV_HINTS
+#BREW                                    := $(shell which brew || echo)
+#export BREW
+#BREW_PREFIX                             := $(shell brew --prefix || echo)
+#export BREW_PREFIX
+#BREW_CELLAR                             := $(shell brew --cellar || echo)
+#export BREW_CELLAR
+#HOMEBREW_NO_ENV_HINTS                   := false
+#export HOMEBREW_NO_ENV_HINTS
 
 #PORTER_VERSION                         :=v1.0.1
 PORTER_VERSION                          :=latest
@@ -251,12 +251,15 @@ export PORTER_VERSION
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?##/ {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 autoconf:## ./autogen.sh && ./configure
-ifeq ($(BREW),)
-	$(MAKE) brew
-endif
+#ifeq ($(BREW),)
+#	$(MAKE) brew
+#endif
 	@./autogen.sh
 	@./autogen.sh configure
 	@./configure --quiet
+#ifeq ($(BREW),)
+#	$(MAKE) brew
+#endif
 
 submodules: ## 	submodules
 	@git submodule update --init --recursive
