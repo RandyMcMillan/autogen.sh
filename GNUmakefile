@@ -282,7 +282,7 @@ init:## chsh -s /bin/bash && ./scripts/initialize
 	bash -c "source $(PWD)/scripts/initialize"
 brew:-## install or update/upgrade brew
 	export HOMEBREW_INSTALL_FROM_API=1
-	type -P brew && echo -e "try\nbrew update --casks --greedy"|| ./install-brew.sh
+	if [[ ! hash brew ]]; then ./install-brew.sh; fi
 	@eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" && brew upgrade  --casks && brew update
 
 .PHONY: help
