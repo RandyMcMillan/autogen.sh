@@ -1,4 +1,6 @@
 #NOTE: using -C for container context
-#The action is run on the submodule .github as an example
+#NOTE: using -v verbose
+#NOTE: using -b bind to local folder
+#NOTE: using -r reuse container
 alpine:docker-start## 	run act in .github
-	@export $(cat ~/GH_TOKEN.txt) && act -C $(PWD) -vr -W $(PWD)/.github/workflows/$@.yml
+	@export $(cat ~/GH_TOKEN.txt) && act -C $(PWD) -vbr -W $(PWD)/.github/workflows/$@.yml
