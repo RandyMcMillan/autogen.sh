@@ -257,9 +257,10 @@ endif
 	@./autogen.sh
 	@./autogen.sh configure
 	@./configure --quiet
-ifeq ($(BREW),)
-	$(MAKE) brew
-endif
+
+submodules: ## 	submodules
+	@git submodule update --init --recursive
+#	@git submodule foreach --recursive "git submodule update --init --recursive"
 
 nodegit$(EXEEXT):
 	-cd $(NODE_MODULE_DIR) && $(NODE_GYP) build

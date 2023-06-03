@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - run: |
-          apk update && apk add file git bash make python3 gcompat libtool
+          apk update && apk add file git bash make python3 libtool autoconf automake libtool libc-dev
           #exec bash && make brew
           #./install-brew.sh
 
@@ -42,3 +42,6 @@ jobs:
         #- run: file /usr/bin/ctags
         #- run: /usr/bin/ctags --version
       - run: make autoconf
+      - run: make submodules
+      - run: mkdir -p  /usr/local/share/man/man1/
+      - run: make nostril

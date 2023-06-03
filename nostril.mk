@@ -1,9 +1,9 @@
 .PHONY:nostril
 nostril:
-	@pushd nostril && $(MAKE) nostril && popd
-	@pushd nostril && $(MAKE) nostril install && popd
+	@cd  $(PWD)/src && $(MAKE) nostril && cd ..
+	@cd  $(PWD)/src && $(MAKE) nostril install && cd ..
 nostril-clean:
-	@make clean -C src/
+	@make clean -C $(PWD)/src/
 
 # vim: set noexpandtab:
 # vim: set setfiletype make

@@ -41,8 +41,8 @@ fi
 #AC_CONFIG_AUX_DIR([config])
 #AC_CONFIG_FILES([config/Makefile])
 
-AC_COPYRIGHT([Copyright (C) 1996-2018 The gnostr.org developers.])
-AC_PREREQ([2.71])			dnl Minimum Autoconf version required.
+AC_COPYRIGHT([Copyright (C) 2023-2023 The gnostr.org developers.])
+AC_PREREQ([2.69])			dnl Minimum Autoconf version required.
 
 dnl We use GNU make extensions; automake 1.10 defaults to -Wportability.
 AM_INIT_AUTOMAKE([gnits 1.11 -Wno-portability dist-bzip2 no-dist-gzip parallel-tests])
@@ -638,7 +638,7 @@ AC_OUTPUT
 
 AC_MSG_NOTICE([
 =====================================================================
-        elfutils: ${PACKAGE_VERSION} (ag_version: ${ag_version})
+        autogen: ${PACKAGE_VERSION} (ag_version: ${ag_version})
 =====================================================================
 
     Prefix                             : ${prefix}
