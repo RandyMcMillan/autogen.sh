@@ -1,6 +1,7 @@
 #!/bin/sh
 #
-autoreconf -vif
+#
+#autoreconf -vif
 
 ln -s $(which glibtoolize) /usr/local/bin/libtoolize
 set -x

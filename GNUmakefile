@@ -576,6 +576,10 @@ index: docs
 readme: docs
 docs:-
 	@echo 'docs'
+	bash -c 'mkdir -p $(PWD)/sources                       '
+	bash -c 'touch $(PWD)/sources/HEADER.md                '
+	bash -c 'touch $(PWD)/sources/COMMANDS.md              '
+	bash -c 'touch $(PWD)/sources/FOOTER.md                '
 	bash -c "if pgrep MacDown; then pkill MacDown; fi"
 	bash -c "make help > $(PWD)/sources/COMMANDS.md"
 	bash -c 'cat $(PWD)/sources/HEADER.md                >  $(PWD)/README.md'
