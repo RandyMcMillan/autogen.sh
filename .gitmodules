@@ -1,12 +1,16 @@
 [submodule "elfutils"]
 	path = elfutils
 	url = git@github.com:RandyMcMillan/elfutils.git
+    ignore = dirty
 [submodule "dugite-native"]
 	path = dugite-native
 	url = git@github.com:gnostr-org/dugite-native.git
+    ignore = dirty
 [submodule "dugite"]
 	path = dugite
 	url = git@github.com:gnostr-org/dugite.git
+    ignore = dirty
 [submodule "nostril"]
 	path = nostril
-	url = git@github.com:RandyMcMillan/nostril
+    url = git@github.com:RandyMcMillan/nostril
+    ignore = dirty
