@@ -4,7 +4,7 @@
 ## how to get this sofware
 ```bash
 cd /path/to/your autotools project
-curl -LO https://raw.githubusercontent.com/leleliu008/autogen.sh/master/autogen.sh
+curl -LO https://raw.githubusercontent.com/randymcmillan/autogen.sh/master/autogen.sh
 chmod +x autogen.sh
 
 # following instrutions is optional, and these instructions only worked in zsh
