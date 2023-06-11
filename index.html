@@ -229,20 +229,20 @@
   <![endif]-->
 </head>
 <body>
-<h1 id="autogen.sh">autogen.sh</h1>
+<h2 id="autogen.sh">autogen.sh</h2>
 <p><code>autogen.sh</code> is a <code>POSIX</code> shell script to
 manage <code>GNU</code> <code>Autotools</code>(<code>autoconf</code>
 <code>automake</code>) and other softwares used by your project.</p>
-<h2 id="how-to-get-this-sofware">how to get this sofware</h2>
+<h3 id="how-to-get-this-sofware">how to get this sofware</h3>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/your autotools project</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-LO</span> https://raw.githubusercontent.com/leleliu008/autogen.sh/master/autogen.sh</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-LO</span> https://raw.githubusercontent.com/randymcmillan/autogen.sh/master/autogen.sh</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x autogen.sh</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># following instrutions is optional, and these instructions only worked in zsh</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">./autogen.sh</span> integrate zsh</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">autoload</span> <span class="at">-U</span> compinit <span class="kw">&amp;&amp;</span> <span class="ex">compinit</span></span></code></pre></div>
-<h2 id="autogen.sh-command-usage">autogen.sh command usage</h2>
+<h3 id="autogen.sh-command-usage">autogen.sh command usage</h3>
 <ul>
 <li><p>show help of this command</p>
 <pre><code>./autogen.sh -h
@@ -270,7 +270,7 @@ command <code>autoload -U compinit &amp;&amp; compinit</code></p></li>
 <li><p>generate the configure shell script</p>
 <pre><code>./autogen.sh configure [ --rc-file=FILE | -x | -d ]</code></pre></li>
 </ul>
-<h2 id="autogen.rc">autogen.rc</h2>
+<h3 id="autogen.rc">autogen.rc</h3>
 <p><code>autogen.rc</code> is also a <code>POSIX</code> shell script. It
 is a extension of <code>autogen.sh</code>. It will be automatically
 loaded if it exists. you can specify a different one via
@@ -306,22 +306,24 @@ declared in <code>autogen.rc</code></h3>
 <table>
 <thead>
 <tr class="header">
-<th>function</th>
-<th>overview</th>
+<th style="text-align: left;">function</th>
+<th style="text-align: left;">overview</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>gen_config_pre(){}</code></td>
-<td>run before <code>gen_config(){}</code></td>
+<td style="text-align: left;"><code>gen_config_pre(){}</code></td>
+<td style="text-align: left;">run before
+<code>gen_config(){}</code></td>
 </tr>
 <tr class="even">
-<td><code>gen_config(){}</code></td>
-<td>run command <code>autoreconf -ivf</code></td>
+<td style="text-align: left;"><code>gen_config(){}</code></td>
+<td style="text-align: left;">run command
+<code>autoreconf -ivf</code></td>
 </tr>
 <tr class="odd">
-<td><code>gen_config_post(){}</code></td>
-<td>run after <code>gen_config(){}</code></td>
+<td style="text-align: left;"><code>gen_config_post(){}</code></td>
+<td style="text-align: left;">run after <code>gen_config(){}</code></td>
 </tr>
 </tbody>
 </table>
@@ -330,42 +332,44 @@ invoked in <code>autogen.rc</code></h3>
 <table>
 <thead>
 <tr class="header">
-<th>function</th>
-<th>example</th>
+<th style="text-align: left;">function</th>
+<th style="text-align: left;">example</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>print</code></td>
-<td><code>print 'your message.'</code></td>
+<td style="text-align: left;"><code>print</code></td>
+<td style="text-align: left;"><code>print 'your message.'</code></td>
 </tr>
 <tr class="even">
-<td><code>echo</code></td>
-<td><code>echo 'your message.'</code></td>
+<td style="text-align: left;"><code>echo</code></td>
+<td style="text-align: left;"><code>echo 'your message.'</code></td>
 </tr>
 <tr class="odd">
-<td><code>info</code></td>
-<td><code>info 'your infomation.'</code></td>
+<td style="text-align: left;"><code>info</code></td>
+<td style="text-align: left;"><code>info 'your infomation.'</code></td>
 </tr>
 <tr class="even">
-<td><code>warn</code></td>
-<td><code>warn "warnning message."</code></td>
+<td style="text-align: left;"><code>warn</code></td>
+<td style="text-align: left;"><code>warn "warnning message."</code></td>
 </tr>
 <tr class="odd">
-<td><code>error</code></td>
-<td><code>error 'error message.'</code></td>
+<td style="text-align: left;"><code>error</code></td>
+<td style="text-align: left;"><code>error 'error message.'</code></td>
 </tr>
 <tr class="even">
-<td><code>die</code></td>
-<td><code>die "please specify a package name."</code></td>
+<td style="text-align: left;"><code>die</code></td>
+<td
+style="text-align: left;"><code>die "please specify a package name."</code></td>
 </tr>
 <tr class="odd">
-<td><code>success</code></td>
-<td><code>success "build success."</code></td>
+<td style="text-align: left;"><code>success</code></td>
+<td style="text-align: left;"><code>success "build success."</code></td>
 </tr>
 <tr class="even">
-<td><code>sed_in_place</code></td>
-<td><code>sed_in_place '/AC_PROG_CC_C99/d' configure.ac</code></td>
+<td style="text-align: left;"><code>sed_in_place</code></td>
+<td
+style="text-align: left;"><code>sed_in_place '/AC_PROG_CC_C99/d' configure.ac</code></td>
 </tr>
 </tbody>
 </table>
@@ -374,75 +378,86 @@ in <code>autogen.rc</code></h3>
 <table>
 <thead>
 <tr class="header">
-<th>variable</th>
-<th>overview</th>
+<th style="text-align: left;">variable</th>
+<th style="text-align: left;">overview</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>NATIVE_OS_TYPE</code></td>
-<td>current machine os type.</td>
+<td style="text-align: left;"><code>NATIVE_OS_TYPE</code></td>
+<td style="text-align: left;">current machine os type.</td>
 </tr>
 <tr class="even">
-<td><code>NATIVE_OS_NAME</code></td>
-<td>current machine os name.</td>
+<td style="text-align: left;"><code>NATIVE_OS_NAME</code></td>
+<td style="text-align: left;">current machine os name.</td>
 </tr>
 <tr class="odd">
-<td><code>NATIVE_OS_VERS</code></td>
-<td>current machine os version.</td>
+<td style="text-align: left;"><code>NATIVE_OS_VERS</code></td>
+<td style="text-align: left;">current machine os version.</td>
 </tr>
 <tr class="even">
-<td><code>NATIVE_OS_ARCH</code></td>
-<td>current machine os arch.</td>
+<td style="text-align: left;"><code>NATIVE_OS_ARCH</code></td>
+<td style="text-align: left;">current machine os arch.</td>
 </tr>
 <tr class="odd">
-<td><code>NATIVE_OS_LIBC</code></td>
-<td>current machine os libc.</td>
+<td style="text-align: left;"><code>NATIVE_OS_LIBC</code></td>
+<td style="text-align: left;">current machine os libc.</td>
 </tr>
 <tr class="even">
-<td></td>
-<td></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td><code>PROJECT_DIR</code></td>
-<td>the project dir.</td>
+<td style="text-align: left;"><code>PROJECT_DIR</code></td>
+<td style="text-align: left;">the project dir.</td>
 </tr>
 <tr class="even">
-<td><code>PROJECT_NAME</code></td>
-<td>the project name.</td>
+<td style="text-align: left;"><code>PROJECT_NAME</code></td>
+<td style="text-align: left;">the project name.</td>
 </tr>
 <tr class="odd">
-<td><code>PROJECT_VERSION</code></td>
-<td>the project version.</td>
+<td style="text-align: left;"><code>PROJECT_VERSION</code></td>
+<td style="text-align: left;">the project version.</td>
 </tr>
 <tr class="even">
-<td></td>
-<td></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td><code>AUTOCONF_VERSION_MREQUIRED</code></td>
-<td>min required version of autoconf.</td>
+<td
+style="text-align: left;"><code>AUTOCONF_VERSION_MREQUIRED</code></td>
+<td style="text-align: left;">min required version of autoconf.</td>
 </tr>
 </tbody>
 </table>
-<p>make [COMMAND] [EXTRA_ARGUMENTS]</p>
-<p>make command description</p>
-<pre><code>                        -
-                        help
-                        report          environment args
+<pre><code>[COMMAND]       [SUMMARY]
 
-                        all         execute installer scripts
-                        init
-                        brew
-                        adduser-git     add a user named git
-                        bootstrap       source bootstrap.sh
-                        install         install sequence
-                        github          config-github
-                        executable      make shell scripts executable
-                        template        install checkbrew command</code></pre>
-<p>#####################</p>
-<pre><code>                        funcs           additional make functions</code></pre>
-<p>Useful Commands:</p>
-<p>git-&lt;TAB&gt; gpg-&lt;TAB&gt; bitcoin-&lt;TAB&gt;</p>
+autoconf    ./autogen.sh configure &amp;&amp; ./configure --quiet   
+submodules  submodules  
+init        chsh -s /bin/bash &amp;&amp; ./scripts/initialize   
+brew        install or update/upgrade brew  
+help        print verbose help  
+report      report  
+whatami         whatami 
+command         command sequence here...    
+executable  executable  
+exec        exec    
+nvm         nvm 
+nvm-clean   nvm-clean   
+docker-start    start docker    
+docker-install  download Docker.amd64.93002.dmg for MacOS Intel Compatibility   
+push        push
+tag         tag
+docs        docs
+touch-time  touch-time
+funcs       additional make functions
+venv        venv
+venv-test   venv-test
+venv-install    venv-install
+alpine      run act in .github
+
+Useful Commands:
+
+</code></pre>
 </body>
 </html>

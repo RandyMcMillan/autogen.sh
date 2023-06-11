@@ -1,27 +1,31 @@
-make [COMMAND] [EXTRA_ARGUMENTS]	
+```
+[COMMAND]		[SUMMARY]
 
- make	                   	command			description
- 	
- 	                       	-
- 	                       	help
- 	                       	report			environment args
- 	
- 	                       	all			execute installer scripts
- 	                       	init
- 	                       	brew
- 	                       	adduser-git		add a user named git
- 	                       	bootstrap		source bootstrap.sh
- 	                       	install		 	install sequence
- 	                       	github		 	config-github
- 	                       	executable		make shell scripts executable
- 	                       	template		install checkbrew command
- #####################
- 	
- 	                       	funcs			additional make functions
+autoconf 	./autogen.sh configure && ./configure --quiet	
+submodules 	submodules	
+init 		chsh -s /bin/bash && ./scripts/initialize	
+brew 		install or update/upgrade brew	
+help 		print verbose help	
+report 		report	
+whatami 		whatami	
+command 		command sequence here...	
+executable 	executable	
+exec 		exec	
+nvm 		nvm	
+nvm-clean 	nvm-clean	
+docker-start 	start docker	
+docker-install 	download Docker.amd64.93002.dmg for MacOS Intel Compatibility	
+push 		push
+tag 		tag
+docs 		docs
+touch-time 	touch-time
+funcs 		additional make functions
+venv 		venv
+venv-test 	venv-test
+venv-install 	venv-install
+alpine 		run act in .github
 
 Useful Commands:
 
-git-\<TAB>
-gpg-\<TAB>
-bitcoin-\<TAB>
 
+```
