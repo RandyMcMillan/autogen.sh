@@ -242,34 +242,25 @@ export PORTER_VERSION
 #$(TASKS):
 #	@yarn $@ $(call args,$@)
 
-##make	:	command			description
+##command:description
 ##	:
--:## - default - try 'make submodules'
 -:
 	eval "$(/opt/homebrew/bin/brew shellenv)" #&
 	#NOTE: 2 hashes are detected as 1st column output with color
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?##/ {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	#@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?##/ {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "%s	%s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	#@echo ${MAKEFILE_LIST}
+	#@sed -n 's/^##/ /p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
-autoconf:## ./autogen.sh && ./configure
-#ifeq ($(BREW),)
-#	$(MAKE) brew
-#endif
-	@./autogen.sh
-	@./autogen.sh configure
-	@./configure --quiet
-#ifeq ($(BREW),)
-#	$(MAKE) brew
-#endif
+autoconf:## 	./autogen.sh configure && ./configure --quiet	
+	@./autogen.sh configure && ./configure --quiet
 
-submodules: ## 	submodules
-	@git submodule update --init --recursive
-#	@git submodule foreach --recursive "git submodule update --init --recursive"
+submodules:## 	submodules	
+	#@git submodule update --init --recursive
+	@git submodule foreach --recursive "git submodule update --init --recursive"
 
 nodegit$(EXEEXT):
 	-cd $(NODE_MODULE_DIR) && $(NODE_GYP) build
-
-clean-local:
-	-cd $(NODE_MODULE_DIR) && node-gyp clean
 
 ##	:	-
 ##	:	help
@@ -279,33 +270,31 @@ clean-local:
 ##	:	init
 ##	:	brew
 
-init:## chsh -s /bin/bash && ./scripts/initialize
+init:## 		chsh -s /bin/bash && ./scripts/initialize	
 .ONESHELL:
 	#["$(shell $(SHELL))" == "/bin/zsh"] && zsh --emulate sh
 	#["$(shell $(SHELL))" == "/bin/zsh"] && chsh -s /bin/bash
 	bash -c "source $(PWD)/scripts/initialize"
-brew:-## install or update/upgrade brew
+brew:-## 		install or update/upgrade brew	
 	export HOMEBREW_INSTALL_FROM_API=1
 	if [[ ! hash brew ]]; then ./install-brew.sh; fi
 	#type -P brew && echo -e "try\nbrew update --casks --greedy" || ./install-brew.sh
 	@eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" && brew upgrade  --casks && brew update
 
 .PHONY: help
-help:## print verbose help
-	@echo 'make [COMMAND] [EXTRA_ARGUMENTS]	'
+help:## 		print verbose help	
+	@echo '```'
+	@echo '[COMMAND]		[SUMMARY]'
 	@echo ''
-	@sed -n 's/^##ARGS//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
-	# @sed -n 's/^.PHONY//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
-	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?##/ {printf "%s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	#@sed -n 's/^## //p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 	@echo ""
 	@echo "Useful Commands:"
 	@echo ""
-	@echo "git-\<TAB>";
-	@echo "gpg-\<TAB>";
-	@echo "bitcoin-\<TAB>";
 	@echo ""
+	@echo '```'
 
-report:
+report:## 		report	
 	@echo ''
 	@echo ' CMAKE=${CMAKE}	'
 	@echo ' GLIBTOOL=${GLIBTOOL}	'
@@ -343,180 +332,27 @@ report:
 	@echo ''
 	@echo ' PORT_VERSION=${PORTER_VERSION}	'
 
-#.PHONY:
-#phony:
-#	@sed -n 's/^.PHONY//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
-
-whatami:
+whatami:## 		whatami	
 	@bash ./whatami.sh
-#.PHONY:readme
-#readme:
-#	make help > source/COMMANDS.md
-#	git add -f README.md && git commit -m "make readme" && git push -f origin master
-.PHONY: adduser-git
-##	:	adduser-git		add a user named git
-adduser-git:
-	source $(PWD)/adduser-git.sh && adduser-git
 
+command: executable## 		command sequence here...	
+	@echo "commandsequence here..."
 
-##	:	bootstrap		source bootstrap.sh
-.PHONY: bootstrap
-bootstrap: exec
-	@bash -c "$(PWD)/bootstrap.sh force"
-
-
-.PHONY: install
-##	:	install		 	install sequence
-install: executable
-	@echo "install sequence here..."
-
-
-.PHONY: github
-##	:	github		 	config-github
-github: executable
-	@./config-github
-
-
-
-
-.PHONY: executable
-executable:
+executable:## 	executable	
 	chmod +x *.sh
-.PHONY: exec
-##	:	executable		make shell scripts executable
-exec: executable
-
-.PHONY: template
-.ONESHELL:
-template:
-##	:	template		install checkbrew command
-	rm -f /usr/local/bin/checkbrew
-	@install -bC $(PWD)/template /usr/local/bin/checkbrew
-	bash -c "source /usr/local/bin/checkbrew"
+exec: executable## 		exec	
 
 .PHONY: nvm
 .ONESHELL:
-nvm: executable ## nvm
+nvm: executable## 		nvm	
 	@curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash || git pull -C $(HOME)/.nvm && export NVM_DIR="$(HOME)/.nvm" && [ -s "$(NVM_DIR)/nvm.sh" ] && \. "$(NVM_DIR)/nvm.sh" && [ -s "$(NVM_DIR)/bash_completion" ] && \. "$(NVM_DIR)/bash_completion"  && nvm install $(NODE_VERSION) && nvm use $(NODE_VERSION)
 	@source ~/.bashrc && nvm alias $(NODE_ALIAS) $(NODE_VERSION)
-nvm-clean: ## nvm-clean
+nvm-clean:## 	nvm-clean	
 	@rm -rf ~/.nvm
-
-vim:## vim - install-vim.sh
-	install -d ./vimrc ~/.vim_runtime
-	bash -c "source $(PWD)/template && checkbrew install --cask	macvim"
-macvim: vim## 	
-	./install-vim.sh
-macdown:
-	bash -c "source $(PWD)/template && checkbrew install	macdown"
-coreutils:
-	bash -c "source $(PWD)/template && checkbrew install	coreutils"
-gettext:
-	bash -c "source $(PWD)/template && checkbrew install	gettext"
-texinfo:
-	bash -c "source $(PWD)/template && checkbrew install	texinfo"
-help2man:
-	bash -c "source $(PWD)/template && checkbrew install	help2man"
-gnutls:
-	bash -c "source $(PWD)/template && checkbrew install	gnutls"
-wasm-pack:
-	curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-brew-libs: libassuan libgcrypt libgpg-error libksba libusb
-libassuan:
-	bash -c "source $(PWD)/template && checkbrew install	libassuan"
-libgcrypt:
-	bash -c "source $(PWD)/template && checkbrew install	libgcrypt"
-libgpg-error:
-	bash -c "source $(PWD)/template && checkbrew install	libgpg-error"
-libksba:
-	bash -c "source $(PWD)/template && checkbrew install	libksba"
-libusb:
-	bash -c "source $(PWD)/template && checkbrew install	libusb"
-htmlcleaner:
-	bash -c "source $(PWD)/template && checkbrew install	maven"
-	bash -c "source $(PWD)/template && checkbrew install	htmlcleaner"
-
-npth:
-	bash -c "source $(PWD)/template && checkbrew install                npth"
-pinentry:
-	bash -c "source $(PWD)/template && checkbrew install pinentry"
-gdbm:
-	bash -c "source $(PWD)/template && checkbrew install                gdbm"
-mpdecimal:
-	bash -c "source $(PWD)/template && checkbrew install mpdecimal"
-openssl@1.1:
-	bash -c "source $(PWD)/template && checkbrew install           openssl@1.1"
-readline:
-	bash -c "source $(PWD)/template && checkbrew install readline"
-sqlite:
-	bash -c "source $(PWD)/template && checkbrew install          sqlite"
-xz:
-	bash -c "source $(PWD)/template && checkbrew install xz"
-python@3.10:
-	bash -c "source $(PWD)/template && checkbrew install    python@3.10"
-node:
-	bash -c "source $(PWD)/template && checkbrew install node"
-node@18:
-	bash -c "source $(PWD)/template && checkbrew install node@18"
-node@16:
-	bash -c "source $(PWD)/template && checkbrew install node@16"
-node@14:
-	bash -c "source $(PWD)/template && checkbrew install node@14"
-node@12:
-	bash -c "source $(PWD)/template && checkbrew install node@12"
-node@10:
-	bash -c "source $(PWD)/template && checkbrew install node@10"
-yarn:
-	bash -c "source $(PWD)/template && checkbrew install      yarn"
-powershell:
-	bash -c "source $(PWD)/template && checkbrew install     powershell"
-meson:
-	bash -c "source $(PWD)/template && checkbrew install                meson"
-texi2html:
-	bash -c "source $(PWD)/template && checkbrew install texi2html"
-ffmpeg@2.8:
-	bash -c "source $(PWD)/template && checkbrew install ffmpeg@2.8"
-
-gnupg:- executable
-	bash -c "source $(PWD)/template && \
-		checkbrew install gettext gnutls \
-		libassuan libgcrypt libgpg-error \
-		libksba libusb npth pinentry gnupg"
-
-gpg-recv-keys-bitcoin-devs:
-	@. .functions &&  gpg-recv-keys-bitcoin-devs
-# bash -c "test docker-compose && brew unlink docker-completion || echo"
-# bash -c "source template.sh && checkbrew install --cask docker"
-
-# 	./install-Docker.sh && \
-# 	./install-FastLane.sh && \
-# 	./install-Onyx.sh && \
-# 	./install-SassC.sh && \
-# 	./install-discord.sh && \
-# 	./install-gnupg+suite.sh && \
-# 	./install-iterm2.sh && \
-# 	./install-keeping-you-awake.sh && \
-# 	./install-little-snitch.sh && \
-# 	./install-openssl.sh && \
-# 	./install-python3.X.sh && \
-# 	./install-protonvpn.sh && \
-# 	./install-ql-plugins.sh && \
-# 	./install-qt5.sh && \
-# 	./install-qt5-creator.sh && \
-# 	./install-sha256sum.sh && \
-# 	./install-vmware-fusion11.sh #Mojave && \
-# 	./install-vypr-vpn.sh && \
-# 	./install-youtube-dl.sh && \
-# 	./install-ytop.sh && \
-# 	./install-umbrel-dev.sh && \
-# 	./install-vim.sh && \
-# 	./install-inkscape.sh && \
-# 	./install-dotfiles-on-remote.sh && \
-	echo; exit;"
 
 #######################
 .ONESHELL:
-docker-start:## 	start docker
+docker-start:## 	start docker	
 	test -d .venv || $(PYTHON3) -m virtualenv .venv
 	( \
 	   source .venv/bin/activate; pip install -q -r requirements.txt; \
@@ -536,7 +372,7 @@ docker-start:## 	start docker
 	done\
 	)
 
-docker-install:## 	Download Docker.amd64.93002.dmg for MacOS Intel Compatibility
+docker-install:## 	download Docker.amd64.93002.dmg for MacOS Intel Compatibility	
 
 	@[[ '$(shell uname -s)' == 'Darwin' ]] && echo "is Darwin" || echo "not Darwin";
 	@[[ '$(shell uname -m)' == 'x86_64' ]] && echo "is x86_64" || echo "not x86_64";
@@ -562,19 +398,19 @@ docker-install:## 	Download Docker.amd64.93002.dmg for MacOS Intel Compatibility
 
 .PHONY: push
 .ONESHELL:
-push: touch-time
+push: touch-time## 		push
 	bash -c "git add -f *.sh *.md sources .gitignore .bash* .vimrc .github index.html TIME *makefile && \
 		git commit -m 'update from $(GIT_USER_NAME) on $(TIME)'"
 	git push -f origin	+master:master
 
-tag:
+tag:## 		tag
 	@git tag $(OS)-$(OS_VERSION)-$(ARCH)-$(shell date +%s)
 	@git push -f --tags
 
 .PHONY: docs readme index
 index: docs
 readme: docs
-docs:-
+docs:-## 		docs
 	@echo 'docs'
 	bash -c 'mkdir -p $(PWD)/sources                       '
 	bash -c 'touch $(PWD)/sources/HEADER.md                '
@@ -585,41 +421,20 @@ docs:-
 	bash -c 'cat $(PWD)/sources/HEADER.md                >  $(PWD)/README.md'
 	bash -c 'cat $(PWD)/sources/COMMANDS.md              >> $(PWD)/README.md'
 	bash -c 'cat $(PWD)/sources/FOOTER.md                >> $(PWD)/README.md'
-	#bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
-	#brew install pandoc
 	bash -c "if hash pandoc 2>/dev/null; then echo; fi || brew install pandoc"
 	#bash -c 'pandoc -s README.md -o index.html  --metadata title="$(GH_USER_SPECIAL_REPO)" '
 	bash -c 'pandoc -s README.md -o index.html'
-	#bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
 	git add --ignore-errors sources/*.md
 	git add --ignore-errors *.md
 	git add --ignore-errors *.html
-	#git ls-files -co --exclude-standard | grep '\.md/$\' | xargs git
+	bash -c 'open README.md'
 
-.PHONY: touch-time
-.ONESHELL:
-touch-time:
-	#rm -f 1618*
-	#$(shell git rm -f 1618*)
+touch-time:## 	touch-time
 	touch TIME
 	echo $(TIME) $(shell git rev-parse HEAD) >> TIME
 
-ifeq ($(bitcoin-version),)
-	@echo Example:
-	@echo add tag v22.0rc3
-BITCOIN_VERSION:=v22.0rc3
-else
-BITCOIN_VERSION:=$(bitcoin-version)
-endif
-export BITCOIN_VERSION
-.PHONY: bitcoin-test-battery
-bitcoin-test-battery:
-	bash -c "./bitcoin-test-battery.sh $(BITCOIN_VERSION) "
-
 .PHONY: funcs
-##	:
-##	:	funcs			additional make functions
-funcs:
+funcs:## 		additional make functions
 	make -f funcs.mk
 
 .ONESHELL:
@@ -639,5 +454,6 @@ elfutils:
 -include venv.mk
 -include act.mk
 -include Makefile
+
 # vim: set noexpandtab:
 # vim: set setfiletype make
